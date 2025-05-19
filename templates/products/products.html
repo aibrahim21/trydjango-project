@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Products{% endblock %}
+
+{% block content %}
+<div class="sidebar">
+    <h3>Categories</h3>
+    <ul>
+        <li {% if not category %}class="selected"{% endif %}>
+            <a href="{% url 'product_list' %}">All</a>
+        </li>
+        {% for c in categories %}
+            <li {% if category.slug == c.slug %}class="selected"{% endif %}>
+                <a href="{% url 'product_list_by_category' c.slug %}">{{ c.name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="content">
+    <h1>{% if category %}{{ category.name }}{% else %}Products{% endif %}</h1>
+    
+    {% for product in products %}
+        <div class="product">
+            <a href="{% url 'product_detail' product.id %}">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" width="200">
+            </a>
+            <h2><a href="{% url 'product_detail' product.id %}">{{ product.name }}</a></h2>
+            <p>${{ product.price }}</p>
+            <p>{{ product.content|truncatewords:30 }}</p>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
